@@ -43,6 +43,36 @@ export interface OrderItem {
   image_url: string | null;
 }
 
+export interface Category {
+  id: number;
+  slug: string;
+  name: string;
+}
+
+export interface Brand {
+  id: number;
+  slug: string;
+  name: string;
+  logo_url: string | null;
+}
+
+export interface ProductsResponse {
+  items: Product[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
+export interface CartItem {
+  variantId: number;
+  productId: number;
+  name: string;
+  size: string;
+  price: number;
+  imageUrl: string | null;
+  quantity: number;
+}
+
 export interface Order {
   id: number;
   user_id: number;

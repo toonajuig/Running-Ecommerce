@@ -1,6 +1,13 @@
 -- Seed data for RunStore
 -- Run AFTER init.sql: npm run db:seed
 
+-- ─── Users (admin + test customer) ───────────────────────────────────────────
+-- password สำหรับ admin = "admin1234"  |  customer = "test1234"
+
+INSERT INTO users (name, email, password_hash, role) VALUES
+  ('Admin',     'admin@runstore.com', '$2a$10$4Xn4Xo5qfdhSJBJttuRITehXvlcV1fUk4KizDJQoA1VLlr5vS6Dpa', 'admin'),
+  ('Test User', 'test@example.com',  '$2a$10$4Xn4Xo5qfdhSJBJttuRITehXvlcV1fUk4KizDJQoA1VLlr5vS6Dpa', 'customer');
+
 -- ─── Categories ───────────────────────────────────────────────────────────────
 
 INSERT INTO categories (slug, name) VALUES
@@ -101,6 +108,25 @@ WITH
 
     RETURNING id, name
   )
+
+-- ─── Product images (Unsplash, verified 200 OK) ──────────────────────────────
+
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' WHERE name = 'Nike Pegasus 41';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1562613521-6b5293e5b0ea?w=800&q=80' WHERE name = 'Nike Vomero 18';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1535595278992-7d1e59b30194?w=800&q=80' WHERE name = 'Adidas Ultraboost 5';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80' WHERE name = 'Adidas Adizero SL2';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80' WHERE name = 'ASICS Gel-Kayano 31';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&q=80' WHERE name = 'Hoka Clifton 9';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&q=80' WHERE name = 'Hoka Speedgoat 6';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80' WHERE name = 'Saucony Ride 17';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1562613521-6b5293e5b0ea?w=800&q=80' WHERE name = 'Saucony Endorphin Speed 4';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&q=80' WHERE name = 'ASICS Trabuco Max 3';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1625785484916-c5d86e5a39f9?w=800&q=80' WHERE name = 'ถุงเท้าวิ่ง Compression';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1434596922112-19c563067271?w=800&q=80' WHERE name = 'ขวดน้ำ Hydration Soft Flask 500ml';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=800&q=80' WHERE name = 'เข็มขัดคาดเอว Running Belt';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1523395243481-163f8f6155ab?w=800&q=80' WHERE name = 'นาฬิกา GPS Garmin Forerunner 265';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=800&q=80' WHERE name = 'สายรัดแขน Phone Armband';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80' WHERE name = 'โฟมนวดกล้ามเนื้อ Foam Roller';
 
 -- ─── Variants ─────────────────────────────────────────────────────────────────
 -- shoes → 3 ไซส์ (40, 42, 44)   accessories → one-size

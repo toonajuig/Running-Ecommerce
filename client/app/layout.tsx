@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import { Suspense } from 'react';
 import './globals.css';
 import Providers from './providers';
 
@@ -13,7 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen font-sans">
-        <Providers>{children}</Providers>
+        <Providers>
+          <Suspense>{children}</Suspense>
+        </Providers>
       </body>
     </html>
   );
