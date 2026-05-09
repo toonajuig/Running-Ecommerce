@@ -61,9 +61,7 @@ const createWithItems = async ({ userId, items }) => {
       );
 
       await client.query(
-        `UPDATE product_variants
-         SET stock = stock - $1, updated_at = NOW()
-         WHERE id = $2`,
+        `UPDATE product_variants SET stock = stock - $1 WHERE id = $2`,
         [item.quantity, item.variantId]
       );
     }
