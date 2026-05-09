@@ -20,16 +20,20 @@ const get = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const { name, description, price, stock, imageUrl } = req.body;
-    if (!name || price == null) {
-      return res.status(400).json({ error: 'name and price are required' });
+    const {
+      categoryId, brandId,
+      name, description, price, imageUrl,
+      gender, shoeType, weightGrams, dropMm,
+    } = req.body;
+
+    if (!name || price == null || !categoryId) {
+      return res.status(400).json({ error: 'name, price, and categoryId are required' });
     }
+
     const product = await Product.create({
-      name,
-      description,
-      price,
-      stock: stock ?? 0,
-      imageUrl,
+      categoryId, brandId,
+      name, description, price, imageUrl,
+      gender, shoeType, weightGrams, dropMm,
     });
     res.status(201).json(product);
   } catch (err) {
@@ -39,7 +43,17 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const product = await Product.update(req.params.id, req.body);
+    const {
+      categoryId, brandId,
+      name, description, price, imageUrl,
+      gender, shoeType, weightGrams, dropMm,
+    } = req.body;
+
+    const product = await Product.update(req.params.id, {
+      categoryId, brandId,
+      name, description, price, imageUrl,
+      gender, shoeType, weightGrams, dropMm,
+    });
     if (!product) return res.status(404).json({ error: 'Product not found' });
     res.json(product);
   } catch (err) {
