@@ -18,3 +18,9 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Claude Code local memory
+.claude/

@@ -2,7 +2,14 @@ const Product = require('../models/productModel');
 
 const list = async (req, res, next) => {
   try {
-    res.json(await Product.list());
+    const { category, brand, gender, sort, q, page, limit } = req.query;
+    const minPrice = req.query.minPrice != null ? Number(req.query.minPrice) : undefined;
+    const maxPrice = req.query.maxPrice != null ? Number(req.query.maxPrice) : undefined;
+    res.json(await Product.list({
+      category, brand, gender, minPrice, maxPrice, sort, q,
+      page:  page  ? Number(page)  : 1,
+      limit: limit ? Number(limit) : 12,
+    }));
   } catch (err) {
     next(err);
   }
@@ -71,4 +78,17 @@ const remove = async (req, res, next) => {
   }
 };
 
-module.exports = { list, get, create, update, remove };
+const listVariants = async (req, res, next) => {
+  try {
+    const ids = String(req.query.ids || '')
+      .split(',')
+      .map(Number)
+      .filter((n) => Number.isInteger(n) && n > 0);
+    if (ids.length === 0) return res.json([]);
+    res.json(await Product.findVariantsByIds(ids));
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { list, get, create, update, remove, listVariants };

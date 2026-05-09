@@ -1,31 +1,79 @@
 const { query } = require('../config/db');
 
-const list = async () => {
+// ORDER BY ที่อนุญาต — ค่า key มาจาก user แต่ value ถูก whitelist ไว้ → ปลอดภัยจาก SQL injection
+const ORDER_MAP = {
+  price_asc:  'price ASC',
+  price_desc: 'price DESC',
+  newest:     'id DESC',
+};
+
+const list = async ({
+  category, brand, gender, minPrice, maxPrice, sort, q,
+  page = 1, limit = 12,
+} = {}) => {
+  const conditions = [];
+  const params = [];
+
+  // push ค่าลง params[] แล้วอ้างด้วย $N — ไม่ตัด string ตรงๆ
+  if (category) {
+    params.push(category);
+    conditions.push(`c.slug = $${params.length}`);
+  }
+  if (brand) {
+    params.push(brand);
+    conditions.push(`b.slug = $${params.length}`);
+  }
+  if (gender) {
+    params.push(gender);
+    conditions.push(`p.gender = $${params.length}`);
+  }
+  if (minPrice != null) {
+    params.push(minPrice);
+    conditions.push(`p.price >= $${params.length}`);
+  }
+  if (maxPrice != null) {
+    params.push(maxPrice);
+    conditions.push(`p.price <= $${params.length}`);
+  }
+  if (q) {
+    params.push(`%${q}%`);
+    // $N ปรากฏสองครั้งในเงื่อนไขเดียว แต่ push ครั้งเดียว — valid ใน PostgreSQL
+    conditions.push(`(p.name ILIKE $${params.length} OR p.description ILIKE $${params.length})`);
+  }
+
+  const where    = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  const orderBy  = ORDER_MAP[sort] ?? 'id DESC';
+  const offset   = (page - 1) * limit;
+
+  params.push(limit);  const limitParam  = `$${params.length}`;
+  params.push(offset);
+  const offsetParam = `$${params.length}`;
+
   const { rows } = await query(`
-    SELECT
-      p.id,
-      p.name,
-      p.description,
-      p.price,
-      p.image_url,
-      p.gender,
-      p.shoe_type,
-      p.weight_grams,
-      p.drop_mm,
-      p.created_at,
-      c.slug AS category_slug,
-      c.name AS category_name,
-      b.slug AS brand_slug,
-      b.name AS brand_name,
-      COALESCE(SUM(v.stock), 0) AS total_stock
-    FROM products p
-    JOIN      categories c ON c.id = p.category_id
-    LEFT JOIN brands b     ON b.id = p.brand_id
-    LEFT JOIN product_variants v ON v.product_id = p.id
-    GROUP BY p.id, c.slug, c.name, b.slug, b.name
-    ORDER BY p.id DESC
-  `);
-  return rows;
+    SELECT *, COUNT(*) OVER() AS total_count
+    FROM (
+      SELECT
+        p.id, p.name, p.description, p.price, p.image_url,
+        p.gender, p.shoe_type, p.weight_grams, p.drop_mm, p.created_at,
+        c.slug AS category_slug, c.name AS category_name,
+        b.slug AS brand_slug,   b.name AS brand_name,
+        COALESCE(SUM(v.stock), 0) AS total_stock
+      FROM products p
+      JOIN      categories c ON c.id = p.category_id
+      LEFT JOIN brands b     ON b.id = p.brand_id
+      LEFT JOIN product_variants v ON v.product_id = p.id
+      ${where}
+      GROUP BY p.id, c.slug, c.name, b.slug, b.name
+    ) sub
+    ORDER BY ${orderBy}
+    LIMIT ${limitParam} OFFSET ${offsetParam}
+  `, params);
+
+  const total = rows.length > 0 ? Number(rows[0].total_count) : 0;
+  // ตัด total_count ออกจากแต่ละ row ก่อนส่งกลับ client
+  const items = rows.map(({ total_count, ...rest }) => rest);
+
+  return { items, total, page: Number(page), totalPages: Math.ceil(total / limit) };
 };
 
 const findById = async (id) => {
@@ -123,4 +171,43 @@ const remove = async (id) => {
   return rows[0] || null;
 };
 
-module.exports = { list, findById, create, update, remove };
+const addVariant = async (productId, { size, sku, stock, priceOverride }) => {
+  const { rows } = await query(
+    `INSERT INTO product_variants (product_id, size, sku, stock, price_override)
+     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+    [productId, size, sku, stock, priceOverride || null],
+  );
+  return rows[0];
+};
+
+const updateVariant = async (id, { stock, priceOverride }) => {
+  const { rows } = await query(
+    `UPDATE product_variants
+     SET stock = COALESCE($1, stock), price_override = $2
+     WHERE id = $3 RETURNING *`,
+    [stock ?? null, priceOverride ?? null, id],
+  );
+  return rows[0] || null;
+};
+
+const deleteVariant = async (id) => {
+  const { rows } = await query(
+    'DELETE FROM product_variants WHERE id = $1 RETURNING id',
+    [id],
+  );
+  return rows[0] || null;
+};
+
+// ดึง stock + ราคาปัจจุบันของ variants หลายตัวพร้อมกัน (ใช้โดย cart validation)
+const findVariantsByIds = async (ids) => {
+  const { rows } = await query(
+    `SELECT pv.id, pv.stock, COALESCE(pv.price_override, p.price) AS price
+     FROM product_variants pv
+     JOIN products p ON p.id = pv.product_id
+     WHERE pv.id = ANY($1::int[])`,
+    [ids],
+  );
+  return rows;
+};
+
+module.exports = { list, findById, create, update, remove, findVariantsByIds, addVariant, updateVariant, deleteVariant };
