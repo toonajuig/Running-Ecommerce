@@ -2,12 +2,13 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
+import { Product } from '@/types';
 import ProductCard from '@/components/ProductCard';
 
 export default function HomePage() {
-  const { data: products, isLoading, error } = useQuery({
+  const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ['products'],
-    queryFn: () => api.get('/products'),
+    queryFn: () => api.get<Product[]>('/products'),
   });
 
   return (

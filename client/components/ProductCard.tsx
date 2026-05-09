@@ -1,4 +1,6 @@
-export default function ProductCard({ product }) {
+import { Product } from '@/types';
+
+export default function ProductCard({ product }: { product: Product }) {
   return (
     <article className="overflow-hidden rounded-lg border bg-white shadow-sm">
       {product.image_url && (
@@ -14,7 +16,7 @@ export default function ProductCard({ product }) {
         {product.description && (
           <p className="mt-1 line-clamp-2 text-sm text-gray-600">{product.description}</p>
         )}
-        <p className="mt-3 text-xl font-bold">${Number(product.price).toFixed(2)}</p>
+        <p className="mt-3 text-xl font-bold">฿{Number(product.price).toLocaleString()}</p>
       </div>
     </article>
   );
