@@ -111,4 +111,34 @@ const listForUser = async (userId) => {
   return rows;
 };
 
-module.exports = { createWithItems, findByIdForUser, listForUser };
+// admin: ดึงออเดอร์ทั้งหมดพร้อม user info
+const listAll = async () => {
+  const { rows } = await query(
+    `SELECT o.*, u.name AS user_name, u.email AS user_email
+     FROM orders o
+     JOIN users u ON u.id = o.user_id
+     ORDER BY o.created_at DESC`,
+  );
+  return rows;
+};
+
+// admin: เปลี่ยน status ได้ทุก order โดยไม่ตรวจ user_id
+const updateStatusAdmin = async (id, status) => {
+  const { rows } = await query(
+    `UPDATE orders SET status = $1, updated_at = NOW() WHERE id = $2 RETURNING *`,
+    [status, id],
+  );
+  return rows[0] || null;
+};
+
+const updateStatus = async (id, userId, status) => {
+  const { rows } = await query(
+    `UPDATE orders SET status = $1, updated_at = NOW()
+     WHERE id = $2 AND user_id = $3
+     RETURNING *`,
+    [status, id, userId],
+  );
+  return rows[0] || null;
+};
+
+module.exports = { createWithItems, findByIdForUser, listForUser, updateStatus, listAll, updateStatusAdmin };

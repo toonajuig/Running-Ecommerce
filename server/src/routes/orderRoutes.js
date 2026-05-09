@@ -8,5 +8,6 @@ router.use(requireAuth);
 router.get('/', orderController.listMine);
 router.get('/:id', orderController.get);
 router.post('/', orderController.create);
+router.patch('/:id/status', orderController.patchStatus);
 
 module.exports = router;
