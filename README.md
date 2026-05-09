@@ -9,20 +9,42 @@ Monorepo for a small ecommerce app.
 ## Prerequisites
 
 - Node.js 20+
-- PostgreSQL 14+
+- Docker Desktop (for running PostgreSQL via `docker-compose.yml`) — alternative: any PostgreSQL 14+ instance
 
 ## Setup
 
+### 1. Install dependencies
+
 ```bash
 npm install
+```
+
+### 2. Start PostgreSQL (Docker)
+
+```bash
+docker compose up -d           # start postgres in background
+docker compose ps              # confirm "healthy"
+docker compose logs -f postgres  # tail logs (Ctrl+C to exit)
+```
+
+The container exposes Postgres on `localhost:5432` with credentials `postgres / postgres` and database `ecommerce` (matches `server/.env.example`). Data persists in the named volume `pg-runstore-data`.
+
+Lifecycle:
+- `docker compose down` — stop containers (data preserved)
+- `docker compose down -v` — stop and **delete the volume** (full reset)
+
+### 3. Configure environment
+
+```bash
 cp server/.env.example server/.env
 cp client/.env.example client/.env.local
 ```
 
-Edit `server/.env` to point at your PostgreSQL instance, create the database, then load the schema:
+Defaults match the Docker Postgres above — only change `JWT_SECRET` to a long random string.
+
+### 4. Load schema
 
 ```bash
-createdb ecommerce
 npm run db:init
 ```
 
