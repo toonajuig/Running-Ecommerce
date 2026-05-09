@@ -7,10 +7,13 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { ProductDetail, ProductVariant } from '@/types';
 import Header from '@/components/Header';
+import { useCart } from '@/context/CartContext';
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [addedFeedback, setAddedFeedback] = useState(false);
+  const { addItem } = useCart();
 
   const { data: product, isLoading, error } = useQuery<ProductDetail>({
     queryKey: ['products', id],
@@ -155,10 +158,25 @@ export default function ProductDetailPage() {
               </p>
               <button
                 disabled={product.variants.length > 1 && !selectedVariant}
+                onClick={() => {
+                  const variant = selectedVariant ?? product.variants[0];
+                  addItem({
+                    variantId: variant.id,
+                    productId: product.id,
+                    name: product.name,
+                    size: variant.size,
+                    price: Number(variant.price_override ?? product.price),
+                    imageUrl: product.image_url,
+                  });
+                  setAddedFeedback(true);
+                  setTimeout(() => setAddedFeedback(false), 1500);
+                }}
                 className="w-full rounded-full bg-ink py-3 text-sm font-medium text-surface-card transition hover:bg-ink-muted disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {product.variants.length > 1 && !selectedVariant
                   ? 'Select a size'
+                  : addedFeedback
+                  ? 'Added!'
                   : 'Add to cart'}
               </button>
             </div>
