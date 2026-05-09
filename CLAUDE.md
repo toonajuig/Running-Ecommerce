@@ -13,6 +13,7 @@ This is a **learning project** — the user is building this ecommerce app to pr
 3. **Teach the *why* behind best practices.** When you pick an idiomatic approach — parameterized SQL (vs string concatenation), `SELECT ... FOR UPDATE` in transactions, bcrypt salt rounds, JWT in `Authorization: Bearer`, TanStack Query `staleTime`, `'use client'` directives, etc. — explain *why* it's the standard, what the wrong alternative would do, and when to deviate.
 4. **Pitch at beginner-to-intermediate.** Assume the user has built small projects but not a production fullstack app. Define jargon on first use (e.g. "middleware = a function that runs between the request arriving and your route handler").
 5. **Show common pitfalls.** Where a beginner would naturally write something insecure, slow, or buggy (storing plaintext passwords, forgetting `await`, missing FK indexes, leaking JWTs to localStorage without thinking, mutating React state), call it out alongside the correct version.
+6. **Quiz after each section.** After finishing an explanation or a block of new code, always end with 2–3 short questions to verify understanding. Questions should target the *why* (not just syntax recall) — e.g. "ถ้าเราไม่ใส่ FOR UPDATE จะเกิดอะไร?" or "ทำไม COALESCE ถึงต้องรับสอง argument?". Wait for answers before moving on. If the answer is wrong or incomplete, explain and re-ask.
 
 If the user asks for something that violates a best practice, do it but flag the trade-off — don't silently "fix" their request, and don't refuse.
 
@@ -27,7 +28,8 @@ Run from the repo root unless noted; npm workspaces dispatches into `client/` an
 - `npm install` — installs both workspaces.
 - `npm run dev` — starts API (port 4000) and web client (port 3000) concurrently.
 - `npm run dev:server` / `npm run dev:client` — start one side only.
-- `npm run db:init` — runs `sql/init.sql` against the configured database. **Destructive: drops `users`, `products`, `orders`, `order_items` first.**
+- `npm run db:init` — runs `sql/init.sql` against the configured database. **Destructive: drops all tables first.**
+- `npm run db:seed` — runs `sql/seed.sql` to insert test data (10 shoes + 6 accessories with variants). Run after `db:init`.
 - `npm run build --workspace=client` / `npm run start --workspace=client` — Next.js prod build & serve.
 - `npm run lint --workspace=client` — Next.js lint.
 
@@ -61,10 +63,17 @@ Request flow: `routes/*` → `controllers/*` → `models/*` → `config/db.js` (
 
 ### Schema (`sql/init.sql`)
 
-Single re-runnable file. Tables: `users`, `products`, `orders`, `order_items` with FK cascades (`orders.user_id`, `order_items.order_id`) and a RESTRICT on `order_items.product_id` to block deleting products that have been ordered. `pg` returns `NUMERIC` columns as **strings** — cast with `Number(...)` before doing math (see `ProductCard`, `orderModel`).
+Single re-runnable file. Tables: `categories`, `brands`, `users`, `products`, `product_variants`, `orders`, `order_items`.
+
+- `products` references `categories` (required) and `brands` (nullable — accessories have no brand).
+- `product_variants` holds `size`, `sku`, `stock`, and optional `price_override` per size. Every product has at least one variant; accessories use `size = 'one-size'`.
+- `order_items` references `product_variants(id)` (not `products`) via `variant_id`, with a RESTRICT to block deleting variants that have been ordered.
+- `pg` returns `NUMERIC` columns as **strings** — cast with `Number(...)` before doing math (see `ProductCard`, `orderModel`).
 
 ## Gotchas
 
-- Re-running `npm run db:init` wipes all data — there is no migration history, only this one file.
-- Order creation can fail mid-transaction with `Insufficient stock` / `Product not found`; the rollback is automatic but the controller re-throws, so any new error paths need to preserve `err.status` to avoid leaking 500s.
+- Re-running `npm run db:init` wipes all data — there is no migration history, only this one file. Run `npm run db:seed` afterwards to restore test data.
+- Order creation can fail mid-transaction with `Insufficient stock` / `Variant not found`; the rollback is automatic but the controller re-throws, so any new error paths need to preserve `err.status` to avoid leaking 500s.
+- `orderModel.js#createWithItems` locks `product_variants` rows with `FOR UPDATE` before checking stock — this prevents overselling under concurrent checkouts.
 - The `users` route `findByEmail` returns the full row including `password_hash`; only the auth flow should call it. Other reads must use `findById`, which projects safe columns.
+- `product_variants` does **not** have an `updated_at` column — only `products` and `orders` do.
