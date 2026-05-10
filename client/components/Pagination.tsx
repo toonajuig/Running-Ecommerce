@@ -14,19 +14,19 @@ export default function Pagination({ page, totalPages, onChange }: PaginationPro
       <button
         onClick={() => onChange(page - 1)}
         disabled={page <= 1}
-        className="rounded-full border border-white/10 px-4 py-2 text-sm text-ink-muted transition hover:border-white/30 hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+        className="rounded-full border border-white/25 px-4 py-2 text-sm text-ink transition hover:border-white/50 disabled:opacity-30 disabled:cursor-not-allowed"
       >
         ← Prev
       </button>
 
-      <span className="text-sm text-ink-muted">
+      <span className="text-sm text-ink">
         {page} / {totalPages}
       </span>
 
       <button
         onClick={() => onChange(page + 1)}
         disabled={page >= totalPages}
-        className="rounded-full border border-white/10 px-4 py-2 text-sm text-ink-muted transition hover:border-white/30 hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+        className="rounded-full border border-white/25 px-4 py-2 text-sm text-ink transition hover:border-white/50 disabled:opacity-30 disabled:cursor-not-allowed"
       >
         Next →
       </button>

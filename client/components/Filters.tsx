@@ -39,7 +39,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
 
       {/* Search */}
       <div>
-        <p className="mb-3 text-xs uppercase tracking-widest text-ink-faint">Search</p>
+        <p className="mb-3 text-xs uppercase tracking-widest text-ink-muted">Search</p>
         <input
           type="text"
           value={values.q}
@@ -51,7 +51,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
 
       {/* Category */}
       <div>
-        <p className="mb-3 text-xs uppercase tracking-widest text-ink-faint">Category</p>
+        <p className="mb-3 text-xs uppercase tracking-widest text-ink-muted">Category</p>
         <ul className="flex flex-col gap-1">
           <li>
             <button
@@ -59,7 +59,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
               className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
                 !values.category
                   ? 'bg-ink text-surface-card'
-                  : 'text-ink-muted hover:text-ink'
+                  : 'text-ink hover:text-ink'
               }`}
             >
               All categories
@@ -72,7 +72,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
                 className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
                   values.category === c.slug
                     ? 'bg-ink text-surface-card'
-                    : 'text-ink-muted hover:text-ink'
+                    : 'text-ink hover:text-ink'
                 }`}
               >
                 {c.name}
@@ -84,7 +84,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
 
       {/* Brand */}
       <div>
-        <p className="mb-3 text-xs uppercase tracking-widest text-ink-faint">Brand</p>
+        <p className="mb-3 text-xs uppercase tracking-widest text-ink-muted">Brand</p>
         <ul className="flex flex-col gap-1">
           <li>
             <button
@@ -92,7 +92,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
               className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
                 !values.brand
                   ? 'bg-ink text-surface-card'
-                  : 'text-ink-muted hover:text-ink'
+                  : 'text-ink hover:text-ink'
               }`}
             >
               All brands
@@ -105,7 +105,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
                 className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
                   values.brand === b.slug
                     ? 'bg-ink text-surface-card'
-                    : 'text-ink-muted hover:text-ink'
+                    : 'text-ink hover:text-ink'
                 }`}
               >
                 {b.name}
@@ -117,7 +117,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
 
       {/* Gender */}
       <div>
-        <p className="mb-3 text-xs uppercase tracking-widest text-ink-faint">Gender</p>
+        <p className="mb-3 text-xs uppercase tracking-widest text-ink-muted">Gender</p>
         <div className="flex flex-wrap gap-2">
           {GENDERS.map((g) => (
             <button
@@ -126,7 +126,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
               className={`rounded-full border px-3 py-1 text-sm transition ${
                 values.gender === g.value
                   ? 'border-ink bg-ink text-surface-card'
-                  : 'border-white/10 text-ink-muted hover:border-white/30 hover:text-ink'
+                  : 'border-white/20 text-ink hover:border-white/40'
               }`}
             >
               {g.label}
@@ -137,7 +137,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
 
       {/* Sort */}
       <div>
-        <p className="mb-3 text-xs uppercase tracking-widest text-ink-faint">Sort</p>
+        <p className="mb-3 text-xs uppercase tracking-widest text-ink-muted">Sort</p>
         <div className="flex flex-col gap-1">
           {SORT_OPTIONS.map((s) => (
             <button
@@ -146,7 +146,7 @@ export default function Filters({ values, categories, brands, onChange, onReset 
               className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
                 values.sort === s.value
                   ? 'bg-ink text-surface-card'
-                  : 'text-ink-muted hover:text-ink'
+                  : 'text-ink hover:text-ink'
               }`}
             >
               {s.label}

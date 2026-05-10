@@ -33,7 +33,7 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* Info */}
         <div className="p-5">
           {product.brand_name && (
-            <p className="mb-1 text-xs uppercase tracking-widest text-ink-faint">
+            <p className="mb-1 text-xs uppercase tracking-widest text-ink-muted">
               {product.brand_name}
             </p>
           )}
