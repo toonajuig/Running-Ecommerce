@@ -111,22 +111,22 @@ WITH
 
 -- ─── Product images (Unsplash, verified 200 OK) ──────────────────────────────
 
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' WHERE name = 'Nike Pegasus 41';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1562613521-6b5293e5b0ea?w=800&q=80' WHERE name = 'Nike Vomero 18';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1535595278992-7d1e59b30194?w=800&q=80' WHERE name = 'Adidas Ultraboost 5';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80' WHERE name = 'Adidas Adizero SL2';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80' WHERE name = 'ASICS Gel-Kayano 31';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&q=80' WHERE name = 'Hoka Clifton 9';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&q=80' WHERE name = 'Hoka Speedgoat 6';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80' WHERE name = 'Saucony Ride 17';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1562613521-6b5293e5b0ea?w=800&q=80' WHERE name = 'Saucony Endorphin Speed 4';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&q=80' WHERE name = 'ASICS Trabuco Max 3';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1625785484916-c5d86e5a39f9?w=800&q=80' WHERE name = 'ถุงเท้าวิ่ง Compression';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1434596922112-19c563067271?w=800&q=80' WHERE name = 'ขวดน้ำ Hydration Soft Flask 500ml';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=800&q=80' WHERE name = 'เข็มขัดคาดเอว Running Belt';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1523395243481-163f8f6155ab?w=800&q=80' WHERE name = 'นาฬิกา GPS Garmin Forerunner 265';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=800&q=80' WHERE name = 'สายรัดแขน Phone Armband';
-UPDATE products SET image_url = 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80' WHERE name = 'โฟมนวดกล้ามเนื้อ Foam Roller';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1562613521-6b5293e5b0ea?w=800&q=80' WHERE name = 'Nike Pegasus 41';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1511317590834-e985451ca5c7?w=800&q=80' WHERE name = 'Nike Vomero 18';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1511499008188-de491bbbae98?w=800&q=80' WHERE name = 'Adidas Ultraboost 5';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1519861297062-a1eec154f81a?w=800&q=80' WHERE name = 'Adidas Adizero SL2';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1560072810-1cffb09faf0f?w=800&q=80' WHERE name = 'ASICS Gel-Kayano 31';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1774280246516-5a817f172a39?w=800&q=80' WHERE name = 'Hoka Clifton 9';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1774280246585-2603ec7b3409?w=800&q=80' WHERE name = 'Hoka Speedgoat 6';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1509418969973-c560ee8f02a0?w=800&q=80' WHERE name = 'Saucony Ride 17';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1765914448100-0845241f7481?w=800&q=80' WHERE name = 'Saucony Endorphin Speed 4';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1739138053507-0f312a938451?w=800&q=80' WHERE name = 'ASICS Trabuco Max 3';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1776860850757-a12ec6e457e2?w=800&q=80' WHERE name = 'ถุงเท้าวิ่ง Compression';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1660908879877-e5f75553f86d?w=800&q=80' WHERE name = 'ขวดน้ำ Hydration Soft Flask 500ml';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1646376248949-9db1b3b7bce4?w=800&q=80' WHERE name = 'เข็มขัดคาดเอว Running Belt';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1773399452188-a42e29543bf2?w=800&q=80' WHERE name = 'นาฬิกา GPS Garmin Forerunner 265';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1563101729-bcedb33154f2?w=800&q=80' WHERE name = 'สายรัดแขน Phone Armband';
+UPDATE products SET image_url = 'https://images.unsplash.com/photo-1591741535585-9c4f52b3f13f?w=800&q=80' WHERE name = 'โฟมนวดกล้ามเนื้อ Foam Roller';
 
 -- ─── Variants ─────────────────────────────────────────────────────────────────
 -- shoes → 3 ไซส์ (40, 42, 44)   accessories → one-size
